@@ -1,0 +1,4 @@
+# Relación de extensiones de ficheros que no van a subirse al repositorio:
+
+# Dependencias:
+/node-modules
