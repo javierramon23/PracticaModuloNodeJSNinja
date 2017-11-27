@@ -33,20 +33,28 @@ const logger = require('morgan');
  * COOKIE PARSER:
  */
 const cookieParser = require('cookie-parser');
-// BODY PARSER:
+
+/**
+ * BODY PARSER:
+ */
 const bodyParser = require('body-parser');
 
 // Cargamos la configuración que se ha definido para la INTERNACIONALIZACION en el fichero 'i18nSetup.js'.
 const i18n = require('./lib/i18nSetup');
 
+/**
+ * ¡¡¡¡JSHINT!!!!
+ */
 /* jshint ignore:start */
+// Cargamos el fichero de CONEXION con la BD de MOONGOOSE 'connectMongoose.js'.
 const db = require('./lib/connectMongoose');
 /* jshint ignore:end */
+
 
 // Cargamos las DEFINICIONES de todos nuestros MODELOS
 require('./models/Anuncio');
 
-// 
+// SE CREA LA APP de EXPRESS.
 const app = express();
 
 // Definimos el MOTOR de VISTAS.
@@ -62,18 +70,25 @@ app.set('view engine', 'ejs');
  * se pasa al SiGUIENTE....
  */
 
- // Se inicia el LOGGER para 'controlar' las peticiones HTTP.
+// Se USA (ejecuta) el LOGGER para 'controlar' las peticiones HTTP.
 app.use(logger('dev'));
-// Se inicia 
+
+// Se USA (ejecuta) el
 app.use(bodyParser.json());
+// Se USA (ejecuta) el
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Se USA (ejecuta) el 
 app.use(cookieParser());
+
+// Se USA (ejecuta) el método STATIC de EXPRESS para determinar de donde se deben servir los ficheros ESTATICOS de la APP.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Se inicia i18n
+// Se USA (ejecuta, inicia) el módulo i18n para la TRADUCCIÓN.
 app.use(i18n.init);
 
-// Definimos una VARIABLES de ENTORNO con el NOMBRE de la APP.
+// Definimos una VARIABLE LOCAL de la APP con el NOMBRE de la APP.
+// Las variables definidas en 'app.locals' permanecen a lo largo de la ejecución de esta.
 app.locals.title = 'NodePop';
 
 // Para las peticiones que se hagan a la RUTA 'raiz' de la APP se utilizaran las RUTAS del fichero 'index.js' para RESPONDER.
@@ -99,7 +114,10 @@ app.use(function (req, res, next) {
 // Es el Middleware que tiene el PARAMETRO 'err' en la definición de la FUNCION que se debe ejecutar.
 app.use(function(err, req, res, next) {
   
-  if (err.array) { // validation error
+  /**
+   * VALIDACION del ERROR...
+   */
+  if (err.array) {
     err.status = 422;
     const errInfo = err.array({ onlyFirstError: true })[0];
     err.message = isAPI(req) ?
@@ -107,26 +125,30 @@ app.use(function(err, req, res, next) {
       : `${__('not_valid')} - ${errInfo.param} ${errInfo.msg}`;
   }
 
-  // establezco el status a la respuesta
+  // Se establece el STATUS del ERROR.
+  // Si YA TIENE UNO asignado, se MANTIENE, si no, se le ASIGNA el STATUS 500.
   err.status = err.status || 500;
+  // Se RESPONDE a la PETICION con el ERROR uqe se ha creado.
   res.status(err.status);
 
-  // si es un 500 lo pinto en el log
+  // Si el STATUS es un 500 lo 'PINTAMOS' en el LOG
   if (err.status && err.status >= 500) console.error(err);
   
-  // si es una petición al API respondo JSON...
+  // Si el ERROR lo ha CAUSADO una PETICION a la API...
   if (isAPI(req)) {
+    // RESPONDEMOS con un OBJETO JSON de ERROR...
     res.json({ success: false, error: err.message });
+    // 'CORTAMOS' la ejecución.
     return;
   }
 
-  // ...y si no respondo con HTML...
+  // ...Y SI NO ES UNA PETICION A LA API respondemos con HTML...
 
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // RESPONDEMOS RENDERIZANDO la VISTA de ERROR HTML.
   res.render('error');
 });
 
@@ -139,4 +161,7 @@ function isAPI(req) {
   return req.originalUrl.indexOf('/api') === 0;
 }
 
+/**
+ * Se EXPORTA
+ */
 module.exports = app;
