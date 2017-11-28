@@ -43,7 +43,8 @@ const bodyParser = require('body-parser');
 const i18n = require('./lib/i18nSetup');
 
 /**
- * ¡¡¡¡JSHINT!!!!
+ * JSHINT: Es una herramienta qe ayuda a detectar errores y problemas potenciales
+ * en nuestro código JS.
  */
 /* jshint ignore:start */
 // Cargamos el fichero de CONEXION con la BD de MOONGOOSE 'connectMongoose.js'.
@@ -100,7 +101,6 @@ app.use('/anuncios', require('./routes/anuncios'));
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 
 // Si hemos llegado a este punto y la petición no COINCIDE con ninguno de los Middlewares ANTERIORES se GENERA un ERROR.
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   // Se crea un Objeto ERROR de tipo 'no encontrado'.
   const err = new Error(__('not_found'));
@@ -118,8 +118,11 @@ app.use(function(err, req, res, next) {
    * VALIDACION del ERROR...
    */
   if (err.array) {
+    // Se estables el STATUS.
     err.status = 422;
+    //
     const errInfo = err.array({ onlyFirstError: true })[0];
+    // Se establece un MENSAJE según la CONDICION...
     err.message = isAPI(req) ?
       { message: __('not_valid'), errors: err.mapped()}
       : `${__('not_valid')} - ${errInfo.param} ${errInfo.msg}`;
@@ -144,7 +147,7 @@ app.use(function(err, req, res, next) {
 
   // ...Y SI NO ES UNA PETICION A LA API respondemos con HTML...
 
-  // set locals, only providing error in development
+  // Se definen unas VARIABLES LOCALES.
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
@@ -162,6 +165,6 @@ function isAPI(req) {
 }
 
 /**
- * Se EXPORTA
+ * Se EXPORTA el CODIGO de la APP para poder ejecutarla desde otro fichero.
  */
 module.exports = app;

@@ -1,58 +1,67 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * Se cargan los MODULOS necesarios para el fichero.
  */
-
 var app = require('../app');
 var debug = require('debug')('nodepop:server');
 var http = require('http');
 
 /**
- * Get port from environment and store in Express.
+ * Se define un PUERTO de ESCUCHA para la APP.
+ * y se establece como PUERTO PREDETERMINADO.
  */
-
+// Se selecciona el puerto que utilizará la APP.
+// Si existe un puerto definido como una VARIABLE de ENTORNO se selecciona ese...
+// Si no existe se selecciona el puerto 3000.
 var port = normalizePort(process.env.PORT || '3000');
+// Se establece el puerto.
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Se crea un SERVIDOR que ejecute la APP.
  */
-
 var server = http.createServer(app);
 
 /**
- * Listen on provided port, on all network interfaces.
+ * Se inicia la ESCUCHA de PETICIONES al SERVIDOR por el PUERTO DEFINIDO.
  */
-
 server.listen(port);
+/**
+ * El servidor se SUSCRIBE a unos EVENTOS a los que deberá RESPONDER, 'error' y 'listening'.
+ */
+// Si se produce el EVENTO 'error', se ejecuta la FUNCION o EVENT LISTENER 'onError'.
 server.on('error', onError);
+// Si se produce el EVENTO 'listening', se ejecuta la FUNCION o EVENT LISTENER 'onListening'.
 server.on('listening', onListening);
 
 /**
- * Normalize a port into a number, string, or false.
+ * se NORMALIZA el PUERTO que utilizará la APP para 'asegurar' el valor introducido.
  */
-
 function normalizePort(val) {
+  // Se transforma el STRING en un valor ENTEROde BASE 10.
   var port = parseInt(val, 10);
 
+  // Si una vez transformado NO es un NUMERO...
   if (isNaN(port)) {
-    // named pipe
+    // Se retorna el STRING.
     return val;
   }
-
+  // Si es un ENTERO mayor que 0
   if (port >= 0) {
-    // port number
+    // Se devuelve ese nuemro de puerto.
     return port;
   }
-
+  // Si no se cumple ninguna de las ANTERIORES...
+  // es un PUERTO no vallido.
   return false;
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * MANEJADOR del EVENTO 'error' 'onError':
+ * Se encarga de manejar los posibles errores que se produzcan a la hora
+ * de poner en marcha el SERVIDOR.
  */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -78,9 +87,9 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * MANEJADOR del EVENTO 'listenig' 'onListening':
+ * Define una nueva línea en el LOG con información del SERVIDOR.
  */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
