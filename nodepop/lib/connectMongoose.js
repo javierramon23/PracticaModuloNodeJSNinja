@@ -34,7 +34,7 @@ db.once('open', function () {
  * Su formato es similar a una URL HTTP.
  * Sustituyendo el protocolo http:// pot mongodb://
  */
-mongoose.connect('mongodb://localhost/nodepop');
+mongoose.connect('mongodb://localhost/nodepop', { useMongoClient: true });
 
 /**
  * Se EXPORTA el CODIGO para ejecutarlo desde otros ficheros.

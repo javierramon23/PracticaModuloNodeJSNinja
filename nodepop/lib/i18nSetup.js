@@ -1,6 +1,8 @@
 /**
  * Fichero de CONFIGURACION del MODULO i18n para la INTERNACIONALIZACION de la APP.
  */
+// Para EJECUTAR el código JS en 'modo estricto', que es menos 'flexible' con los errores de sintaxis de JS.
+'use strict';
 
  // Se cargan los MODULOS necesarios.
 const i18n = require('i18n');

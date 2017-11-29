@@ -1,5 +1,5 @@
 {
-	"__comentario":"Los ficheros de idiomas '.json' incluyen los LITERALES que se muestran el las VISTAS en distintos IDIOMAS ",
+	// Los ficheros de idiomas '.json' incluyen los LITERALES que se muestran el las VISTAS en distintos IDIOMAS.
 	"empty_file": "el fichero {{file}} está vacio",
 	"not_found": "No encontrado",
 	"not_valid": "No válido",

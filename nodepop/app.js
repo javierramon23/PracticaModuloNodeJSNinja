@@ -111,20 +111,28 @@ app.use(function (req, res, next) {
 });
 
 // MANEJADOR DE ERRORES.
+// Se encarga de MANEJAR los distintos TIPOS de ERRORES que pueden ocurrir.
 // Es el Middleware que tiene el PARAMETRO 'err' en la definición de la FUNCION que se debe ejecutar.
 app.use(function(err, req, res, next) {
   
   /**
-   * VALIDACION del ERROR...
+   * ERROR de VALIDACIÓN de los PARAMETROS.
    */
+  // Será un error de VALIDACION si 'err' tiene una propiedad 'array'.
   if (err.array) {
-    // Se estables el STATUS.
+    // Se establece el STATUS específico.
     err.status = 422;
-    //
     const errInfo = err.array({ onlyFirstError: true })[0];
     // Se establece un MENSAJE según la CONDICION...
+    /**
+     * CONDICIONAL TERNARIO:
+     * condición ? expr1 : expr2 
+     */
+    // Si es una peticion a la API...
     err.message = isAPI(req) ?
+      // Creamos JSON con el error.
       { message: __('not_valid'), errors: err.mapped()}
+      // si no, creamos un string para mostrarlo en la VISTA HTML.
       : `${__('not_valid')} - ${errInfo.param} ${errInfo.msg}`;
   }
 
@@ -134,10 +142,15 @@ app.use(function(err, req, res, next) {
   // Se RESPONDE a la PETICION con el ERROR uqe se ha creado.
   res.status(err.status);
 
+  /**
+   * ERROR del SERVIDOR.
+   */
   // Si el STATUS es un 500 lo 'PINTAMOS' en el LOG
   if (err.status && err.status >= 500) console.error(err);
   
-  // Si el ERROR lo ha CAUSADO una PETICION a la API...
+  /**
+   * ERROR de SOLICITUD a la API.
+   */
   if (isAPI(req)) {
     // RESPONDEMOS con un OBJETO JSON de ERROR...
     res.json({ success: false, error: err.message });
@@ -145,8 +158,9 @@ app.use(function(err, req, res, next) {
     return;
   }
 
-  // ...Y SI NO ES UNA PETICION A LA API respondemos con HTML...
-
+  /**
+   * OTROS ERRORES de HTML
+   */
   // Se definen unas VARIABLES LOCALES.
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -156,11 +170,14 @@ app.use(function(err, req, res, next) {
 });
 
 /**
- * 
  * Funcion AUXILIAR que comprueba si una PETICION este DIRIGIDA a la API.
  */
 function isAPI(req) {
-  
+  // Retorna TRUE o FALSE en función de que encuentre el string '/api' dentro de la RUTA de la PETICION.
+  /**
+   * req.originalUrl guarda la URL de la solicitud MENOS el dominio principal:
+   * Si la petición es: 'http://www.example.com/admin/new' --> req.originalUrl = '/admin/new'
+   */
   return req.originalUrl.indexOf('/api') === 0;
 }
 
