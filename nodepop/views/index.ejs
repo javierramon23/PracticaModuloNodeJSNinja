@@ -1,13 +1,15 @@
+<!-- Se incluye el fichero '_header.html' que DEFINE la CABECERA -->
 <% include _header %>
-
   <!-- 
     Visor de Markdown
     http://strapdownjs.com/
   -->
+  <!-- Entre los TAGS <xmp> se sitúa el codigo Markdown a mostrar -->
   <xmp theme="united" style="display:none;">
+    <!-- Se muestra la CONSTANTE que se ha pasado desde el archivo de RUTAS 'index.js' al hacer RENDER -->
     <%- readme %>
   </xmp>
-
+  <!-- Se carga el SCRIPT necesario para poder mostrar un código Markdown en un HTML -->
   <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-
+<!-- Se incluye el fichero '_footer.html' que DEFINE el PIE-->
 <% include _footer %>
