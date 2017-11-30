@@ -32,7 +32,7 @@ router.get('/', async function (req, res, next) {
     // Se RENDERIZA la VISTA del HOME (index.ejs).
     // a la que se la pasa la constante 'readme' para que la muestre.
     res.render('index', { readme });
-  //Si se produce un ERROR...
+  // Si se produce un ERROR...
   } catch (err) { 
       // 'SALTAMOS' al middleware de MANEJO de ERRORES.
       return next(err); 

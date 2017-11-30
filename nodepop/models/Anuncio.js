@@ -110,7 +110,7 @@ anuncioSchema.statics.list = async function(filters, startRow, numRows, sortFiel
   const ruta = configAnuncios.imagesURLBasePath;
   result.rows.forEach(r => r.foto = r.foto ? path.join(ruta, r.foto) : null );
 
-  // Si me dan un CallBack (cb) devuelvo los resultados por ahí
+  // Si me dan un CALLBACK (cb) devuelvo los resultados por ahí
   if (cb) return cb(null, result); 
   // Si no, los devuelvo por la promesa del async (async está en la primera linea de esta función)
   return result; 
