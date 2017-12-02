@@ -1,7 +1,18 @@
 {
-	// Los ficheros de idiomas '.json' incluyen los LITERALES que se muestran el las VISTAS en distintos IDIOMAS.
-	"empty_file": "el fichero {{file}} está vacio",
-	"not_found": "No encontrado",
-	"not_valid": "No válido",
-	"generic": "Hubo un error: {{err}}"
+	"LIST_OF_ADS": "Listado de Anuncios: ",
+	"IT_SHOW": "Se muestran: ",
+	"NAME": "Nombre",
+	"SALE": "Venta",
+	"PRICE": "Precio",
+	"IMAGE": "Imagen",
+	"TAGS": "Tags",
+	"EXAMPLES": "Ejemplos: ",
+	"BACK_HOME": "Volver al Home",
+	"ALL_ADS": "Todos los anuncios (Max. 1000)",
+	"PAGED": "Paginado",
+	"SORTED_BY_ASCENDING_PRICE": "Ordenado por precio ASCENDENTE",
+	"SORTED_BY_DESCENDING_PRICE": "Ordenado por precio DESCENDENTE",
+	"WITH_TAG_MOBILE": "Con TAG mobile",
+	"NOT_FOUND": "Rcurso solicitado no encontrado",
+	"not_found": "not_found"
 }

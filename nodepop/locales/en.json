@@ -1,3 +1,18 @@
 {
+	"LIST_OF_ADS": "List of Ads: ",
+	"IT_SHOW": "It show: ",
+	"NAME": "Name",
+	"SALE": "Sale",
+	"PRICE": "Price",
+	"IMAGE": "Image",
+	"TAGS": "Tags",
+	"EXAMPLES": "Examples: ",
+	"BACK_HOME": "Back Home Page",
+	"ALL_ADS": "All Ads (Max. 1000)",
+	"PAGED": "Paged",
+	"SORTED_BY_ASCENDING_PRICE": "Sorted by ASCENDING price",
+	"SORTED_BY_DESCENDING_PRICE": "Sorted by DESCENDING price",
+	"WITH_TAG_MOBILE": "With TAG mobile",
+	"MOT_FOUND": "Request resorce not found",
 	"not_found": "not_found"
 }

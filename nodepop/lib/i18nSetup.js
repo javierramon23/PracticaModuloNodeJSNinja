@@ -12,10 +12,18 @@ const path = require('path');
 i18n.configure({
   // RUTA donde se encuentran los ficheros de IDIOMAS.
   directory: path.join(__dirname, '..', 'locales'),
+  // Se definen los IDIOMAS DISPONIBLES en la APP.
+  locales: ['en', 'es'],
   // Idioma POR DEFECTO.
-  defaultLocale: 'en',
+  defaultLocale: 'es',
   // EVITA tener que utilizar 'i18n.' A LA HORA DE MOSTRAR un TEXTO, "__('texto')"" en lugar de "i18n.__('texto')"
-  register: global
+  register: global,
+  // Permite ESTABLECER el IDIOMA a través de la BARRA de NAVEGACIÓN con una QUERY STRING.
+  queryParameter: 'lang',
+  // SINCRONIZA el CONTENIDO de los LOCALE de forma AUTOMATICA.
+  syncFiles: true,
+  // Se establece un NOMBRE de COOKIE para ESTABLECER el IDIOMA.
+  cookie: 'nodeapi_laguage'
 });
 
 /**

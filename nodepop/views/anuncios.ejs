@@ -1,9 +1,21 @@
 <!-- Se incluye el fichero '_header.html' que DEFINE la CABECERA -->
 <% include _header %>
-<!-- -->
+
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
-    <div class="navbar-header"><a href="/" class="navbar-brand">Nodeapi</a></div>
+    <div class="navbar-header">
+    <a href="/" class="navbar-brand">Nodeapi</a>
+
+    <!-- El METODO getLocales() de i18n retorna un ARRAY con los IDIOMAS disponibles -->
+    <!-- Con METODO forEach() de un ARRAY, recorremos este y creamos un LINK de cambio de IDIOMA para cada uno -->
+    <% getLocales().forEach(lang => { %>
+      <!-- Como destino del LINK se establece el ENDPOINT o MIDDLEWARE que realiza el cambio del IDIOMA -->
+      <a class="navbar-brand" href="anuncios/language/<%= lang %>">
+        <img src='images/languages/<%= lang %>.png' >
+      </a>
+    <% }) %>
+
+    </div>
   </div>
 </div>
 
@@ -11,8 +23,8 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h1>Lista de anuncios</h1>
-      <p class="lead">Listando: <%= anuncios.length %> de <%= total %></p>
+      <h1><%= __('LIST_OF_ADS') %></h1>
+      <p class="lead"><%=__('IT_SHOW') + anuncios.length %> de <%= total %></p>
     </div>
   </div>
 
@@ -21,11 +33,11 @@
     <!-- TABLA CON LOS RESULTADOS. -->
       <table class="table table-hover">
         <thead><tr>
-          <th>Nombre</th>
-          <th>Venta</th>
-          <th style="text-align: right">Precio</th>
-          <th>Foto</th>
-          <th>Tags</th>
+          <th><%= __('NAME') %></th>
+          <th><%= __('SALE') %></th>
+          <th style="text-align: right"><%= __('PRICE') %></th>
+          <th><%= __('IMAGE') %></th>
+          <th><%= __('TAGS') %></th>
           <th>#</th>
         </tr></thead>
         <tbody>
@@ -34,7 +46,7 @@
           <tr>
             <td><%= anuncio.nombre %></td>
             <td><%= anuncio.venta ? 'Si' : 'No' %></td>
-            <td style="text-align: right"><%= anuncio.precio / 100 %>€</td>
+            <td style="text-align: right"><%= anuncio.precio / 100 %> €</td>
             <td><img src="<%= anuncio.foto %>"></td>
             <td><%= anuncio.tags %></td>
             <td><%= anuncio._id %></td>
@@ -43,20 +55,20 @@
         </tbody>
       </table>
 
-      <p>Ejemplos:</p>
+      <p><%= __('EXAMPLES') %></p>
 
       <ul>
-        <li><a href="?">Todos (max. 1000)</a></li>
-        <li><a href="?start=2&limit=2">Paginado</a></li>
-        <li><a href="?sort=precio">Ordenado por precio ascendente</a></li>
-        <li><a href="?sort=-precio">Ordenado por precio descendente</a></li>
-        <li><a href="?tag=mobile">Con tag mobile</a></li>
+        <li><a href="?"><%= __('ALL_ADS') %></a></li>
+        <li><a href="?start=2&limit=2"><%= __('PAGED') %></a></li>
+        <li><a href="?sort=precio"><%= __('SORTED_BY_ASCENDING_PRICE') %></a></li>
+        <li><a href="?sort=-precio"><%= __('SORTED_BY_DESCENDING_PRICE') %></a></li>
+        <li><a href="?tag=mobile"><%= __('WITH_TAG_MOBILE') %></a></li>
       </ul>
 
     </div>
   </div>
 
-  <a href="/">Volver a la home</a>
+  <a href="/"><%= __('BACK_HOME') %></a>
 
 </div>
 <!-- Se incluye el fichero '_footer.html' que DEFINE el PIE -->

@@ -1,17 +1,31 @@
 {
   "anuncios": [
     {
-      "nombre": "Bicicleta",
+      "nombre": "iPhone X",
       "venta": true,
-      "precio": 23015,
-      "foto": "bici.jpg",
-      "tags": [ "lifestyle", "motor"]
+      "precio": 113900,
+      "foto": "iphoneX.png",
+      "tags": [ "lifestyle", "mobile"]
     },
     {
-      "nombre": "iPhone 3GS",
+      "nombre": "iPad Pro",
       "venta": false,
-      "precio": 5000,
-      "foto": "iphone.png",
+      "precio": 89900,
+      "foto": "ipadPro.png",
+      "tags": [ "lifestyle", "mobile"]
+    },
+    {
+      "nombre": "Apple Watch",
+      "venta": false,
+      "precio": 36900,
+      "foto": "appleWatch.png",
+      "tags": [ "lifestyle", "mobile"]
+    },
+    {
+      "nombre": "iPod Nano",
+      "venta": false,
+      "precio": 19900,
+      "foto": "ipodNano.jpg",
       "tags": [ "lifestyle", "mobile"]
     }
   ]

@@ -85,12 +85,12 @@ app.use(cookieParser());
 // Se USA (ejecuta) el método STATIC de EXPRESS para determinar de donde se deben servir los ficheros ESTATICOS de la APP.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Se USA (ejecuta, inicia) el módulo i18n para la TRADUCCIÓN.
+// Se USA (ejecuta, inicia) el módulo i18n para la INTERNACIONALIZACION.
 app.use(i18n.init);
 
 // Definimos una VARIABLE LOCAL de la APP con el NOMBRE de la APP.
 // Las variables definidas en 'app.locals' permanecen a lo largo de la ejecución de esta.
-app.locals.title = 'NodePop';
+app.locals.title = 'NodePop APP';
 
 // Para las peticiones que se hagan a la RUTA 'raiz' de la APP se utilizaran las RUTAS del fichero 'index.js' para RESPONDER.
 app.use('/', require('./routes/index'));

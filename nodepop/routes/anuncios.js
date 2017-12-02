@@ -50,6 +50,32 @@ router.get('/', async function (req, res, next) {
 });
 
 /**
+ * Petición GET para CAMBIAR el IDIOMA de la PAGINA de ANUNCIOS.
+ * como no vamos a utilizar 'next', no hace falta que lo pongamos.
+ */
+router.get('/language/:locale', (request, response) => {
+
+  //La PETICION lleva un PARAMETRO que determina el idioma que queremos poner.
+  const locale = request.params.locale;
+
+  /**
+   * Se guarda la CABECERA 'Referer' de la PETICION para saber
+   * DESDE DONDE HA VENIDO LA PETICION para más tarde REDIRIGIR la RESPUESTA
+   * a ESA MISMA DIRECCIÓN pero ya TRADUCIDA.
+   */
+  const referer = request.get('referer');
+
+  // Se establece el VALOR de la COOKIE que se ha definido en i18n con el IDIOMA que se quiere ESTABLECER.
+  response.cookie('nodeapi_laguage', locale, { maxAge: 90000, httpOnly: true });
+  
+  /**
+   * Se REDIRIGE el NAVEGADOR (o al usuario) a la WEB desde la que se solicito el CAMBIO de IDIOMA.
+   * Se utiliza el valor de la CABECERA 'REFERER' que se ha guardado antes.
+   */ 
+  response.redirect(referer);
+});
+
+/**
  * Se EXPORTA la RUTA para poder utilizarla en otro fichero (concretamente en app.js).
  */
 module.exports = router;
