@@ -13,6 +13,7 @@
 	"SORTED_BY_ASCENDING_PRICE": "Sorted by ASCENDING price",
 	"SORTED_BY_DESCENDING_PRICE": "Sorted by DESCENDING price",
 	"WITH_TAG_MOBILE": "With TAG mobile",
-	"MOT_FOUND": "Request resorce not found",
-	"not_found": "not_found"
+	"NOT_FOUND": "Request resorce not found",
+	"PLEASE_LOGIN_TO_ACCESS_APPLICATION": "Please, login to access APP.",
+	"NOT_VALID": "Not Valid"
 }

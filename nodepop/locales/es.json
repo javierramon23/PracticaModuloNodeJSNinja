@@ -14,5 +14,6 @@
 	"SORTED_BY_DESCENDING_PRICE": "Ordenado por precio DESCENDENTE",
 	"WITH_TAG_MOBILE": "Con TAG mobile",
 	"NOT_FOUND": "Rcurso solicitado no encontrado",
-	"not_found": "not_found"
+	"PLEASE_LOGIN_TO_ACCESS_APPLICATION": "Porfavor, haz LOGIN para acceder a la APP.",
+	"NOT_VALID": "No Valido."
 }

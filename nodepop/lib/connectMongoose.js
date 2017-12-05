@@ -26,7 +26,8 @@ db.on('error', function (err) {
 // La PRIMERA VEZ que se produce el EVENTO 'open'...
 db.once('open', function () {
   // Se muestra un mensaje de AVISO de CONEXION por la consola del servidor.
-  console.info('Connected to mongodb.');
+  // Se muestra tb la BD a la que nos estamos conectando.
+  console.info('Connected to mongodb on', mongoose.connection.name);
 });
 
 /**

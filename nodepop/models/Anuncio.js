@@ -31,12 +31,13 @@ const anuncioSchema = mongoose.Schema({
  * Listado de TAGS permitidos para el 'campo' TAGS de un ANUNCIO.
  */
 anuncioSchema.statics.allowedTags = function () {
-  return ['work', 'lifestyle', 'motor', 'mobile'];
+  return ['work', 'lifestyle','motor', 'mobile'];
 };
 
 /**
  * METODO ESTATICO.
- * 
+ * Se encarga de leer el fichero JSON que contiene los VALORES INICIALES de la BD y
+ * genera un REGISTRO en la BD para cada uno de ellos.
  */
 anuncioSchema.statics.cargaJson = function (fichero, cb) {
   // Encodings: https://nodejs.org/api/buffer.html
@@ -116,7 +117,10 @@ anuncioSchema.statics.list = async function(filters, startRow, numRows, sortFiel
   return result; 
 };
 
+// Se CREA un MODELO a partir de su SCHEMA.
+var Anuncio = mongoose.model('Anuncio', anuncioSchema);
+
 /**
  * Se EXPORTA el MODELO para poder utilizarlo en otros ficheros.
  */
-var Anuncio = mongoose.model('Anuncio', anuncioSchema);
+module.exports = Anuncio;

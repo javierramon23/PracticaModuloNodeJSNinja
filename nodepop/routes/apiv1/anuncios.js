@@ -25,7 +25,7 @@ router.get('/', (req, res, next) => {
   const limit = parseInt(req.query.limit) || 1000; 
   // sort: Establece el parámetro por el que se ORDENAN los registros, el ID por defecto.
   const sort = req.query.sort || '_id';
-  // 
+  // includeTotal: Establece si se debe realizar la cuenta de TODOS los registros de la COLECCION.
   const includeTotal = req.query.includeTotal === 'true';
 
   // OBJETO JSON VACIO para 'COMPONER' el FILTRO que se le pasará a la oonsulta. 
@@ -51,20 +51,25 @@ router.get('/', (req, res, next) => {
   // Si la Query String contiene el parámetro 'precio'
   // y este parámetro no es el caracter '-'...
   if (typeof req.query.precio !== 'undefined' && req.query.precio !== '-') {
-    //
+    // Si el parámetro contiene un GUION (-)...
     if (req.query.precio.indexOf('-') !== -1) {
+      // Se define un filtro ESPECIFICO para el PRECIO que se debe buscar en la consulta.
       filters.precio = {};
+      // Se 'elimina' el GUION (solo necesario para determinar la primera condición).
       let rango = req.query.precio.split('-');
+      // SI NO HAY NADA ANTES del PRECIO a BUSCAR....
       if (rango[0] !== '') {
+        // El PRECIO de los registros sea MAYOR que el del parametro.
         filters.precio.$gte = rango[0];
       }
-
+      // SI NO HAY NADA DESPUES del PRECIO a BUSCAR....
       if (rango[1] !== '') {
+        // Que el PRECIO de los registros sea MENOR que el del parametro.
         filters.precio.$lte = rango[1];
       }
-    //
+    // Si no se pone el GUION...
     } else {
-
+      // Se debe filtrar por los registros que COINCIDAN con el precio soilicitado.
       filters.precio = req.query.precio;
     }
   }

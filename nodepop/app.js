@@ -51,8 +51,11 @@ const i18n = require('./lib/i18nSetup');
 const db = require('./lib/connectMongoose');
 /* jshint ignore:end */
 
+// Cargamos el CONTROLADOR LoginController en este punto.
+const loginController = require('./routes/loginController');
 
 // Cargamos las DEFINICIONES de todos nuestros MODELOS
+//**************SI NO HACEMOS REFERENCIA A EL, POR QUE CARGARLO????
 require('./models/Anuncio');
 
 // SE CREA LA APP de EXPRESS.
@@ -92,10 +95,17 @@ app.use(i18n.init);
 // Las variables definidas en 'app.locals' permanecen a lo largo de la ejecución de esta.
 app.locals.title = 'NodePop APP';
 
+// MIDDLEWARE para LOGIN de USUARIOS:
+// En lugar de 'app.use' vamos directamente a controlar las PETICIONES al METODO 'index' CONCRETO
+// Por esa razon utilizamos 'app.get', usamos las RUTAS del CONTROLADOR.
+app.use('/login', loginController.index);
+
 // Para las peticiones que se hagan a la RUTA 'raiz' de la APP se utilizaran las RUTAS del fichero 'index.js' para RESPONDER.
 app.use('/', require('./routes/index'));
+
 // Para las peticiones que se hagan a la RUTA '/anuncios' de la APP se utilizaran las RUTAS del fichero 'anuncios.js' para RESPONDER.
 app.use('/anuncios', require('./routes/anuncios'));
+
 
 // Para las peticiones que se hagan a la RUTA '/apiv1/anuncios' de la APP se utilizaran las RUTAS del fichero '/apiv1/anuncios.js' para RESPONDER.
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
@@ -103,7 +113,7 @@ app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 // Si hemos llegado a este punto y la petición no COINCIDE con ninguno de los Middlewares ANTERIORES se GENERA un ERROR.
 app.use(function (req, res, next) {
   // Se crea un Objeto ERROR de tipo 'no encontrado'.
-  const err = new Error(__('not_found'));
+  const err = new Error(__('NOT_FOUND'));
   // Se establece su estatus.
   err.status = 404;
   // REDIRIGIMOS la ejecución al MANEJADOR de ERRORES.
@@ -131,9 +141,9 @@ app.use(function(err, req, res, next) {
     // Si es una peticion a la API...
     err.message = isAPI(req) ?
       // Creamos JSON con el error.
-      { message: __('not_valid'), errors: err.mapped()}
+      { message: __('NOT_VALID'), errors: err.mapped()}
       // si no, creamos un string para mostrarlo en la VISTA HTML.
-      : `${__('not_valid')} - ${errInfo.param} ${errInfo.msg}`;
+      : `${__('NOT_VALID')} - ${errInfo.param} ${errInfo.msg}`;
   }
 
   // Se establece el STATUS del ERROR.
