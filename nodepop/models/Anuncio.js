@@ -43,19 +43,14 @@ anuncioSchema.statics.cargaJson = function (fichero, cb) {
   // Encodings: https://nodejs.org/api/buffer.html
   fs.readFile(fichero, { encoding: 'utf8' }, function (err, data) {
     if (err) return cb(err);
-
     console.log(fichero + ' leido.');
-
     if (data) {
-
       const anuncios = JSON.parse(data).anuncios;
       const numAnuncios = anuncios.length;
-
       flow.serialArray(anuncios, Anuncio.createRecord, (err)=> {
         if (err) return cb(err);
         return cb(null, numAnuncios);
       });
-
     } else {
       return cb(new Error( __('empty_file', { file: fichero }) ));
     }

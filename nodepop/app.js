@@ -42,6 +42,9 @@ const bodyParser = require('body-parser');
 // Cargamos la configuración que se ha definido para la INTERNACIONALIZACION en el fichero 'i18nSetup.js'.
 const i18n = require('./lib/i18nSetup');
 
+// Inicializamos las VARIABLES de ENTORNO desde el fichero .env
+require('dotenv').config();
+
 /**
  * JSHINT: Es una herramienta qe ayuda a detectar errores y problemas potenciales
  * en nuestro código JS.
@@ -51,12 +54,13 @@ const i18n = require('./lib/i18nSetup');
 const db = require('./lib/connectMongoose');
 /* jshint ignore:end */
 
-// Cargamos el CONTROLADOR LoginController en este punto.
-const loginController = require('./routes/loginController');
+// Cargamos el MODULO de AUTENTICACION.
+const jwtAuth = require('./lib/jwtAuth');
 
-// Cargamos las DEFINICIONES de todos nuestros MODELOS
-//**************SI NO HACEMOS REFERENCIA A EL, POR QUE CARGARLO????
+// Cargamos las DEFINICIONES de todos nuestros MODELOS para que MONGOOSE los conozca.
+//¿¿¿ SI NO HACEMOS REFERENCIA A EL, POR QUE CARGARLO ????
 require('./models/Anuncio');
+require('./models/Usuario');
 
 // SE CREA LA APP de EXPRESS.
 const app = express();
@@ -69,22 +73,23 @@ app.set('view engine', 'ejs');
 
 /**
  * ¡¡¡¡¡LOS MIDDLEWARES!!!!!
- * app.use() : Define un Middleware que se ejecutará o no en función pe las PETICIONES.
+ * app.use() : Define un Middleware que se ejecutará o no, en función de las PETICIONES.
  * Los Middlewares se EVALUAN y EJECUTAN en ORDEN LINEAL y DESCENDENTE, si la petición no CUMPLE,
  * se pasa al SiGUIENTE....
+ * 
+ * EXPRESS utiliza los siguientes TIPOS de MIDDLEWARE:
+ * http://expressjs.com/es/guide/using-middleware.html.
+ * 1.- Middleware de Nivel de Aplicación: SIN y CON VIA de ACCESO.
+ * 2.- Middleware de Manejo de Errores.
+ * 3.- Middleware Incorporado.
+ * 4.- Middleware de Terceros.
  */
 
 // Se USA (ejecuta) el LOGGER para 'controlar' las peticiones HTTP.
 app.use(logger('dev'));
-
-// Se USA (ejecuta) el
 app.use(bodyParser.json());
-// Se USA (ejecuta) el
 app.use(bodyParser.urlencoded({ extended: false }));
-
-// Se USA (ejecuta) el 
 app.use(cookieParser());
-
 // Se USA (ejecuta) el método STATIC de EXPRESS para determinar de donde se deben servir los ficheros ESTATICOS de la APP.
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -95,20 +100,18 @@ app.use(i18n.init);
 // Las variables definidas en 'app.locals' permanecen a lo largo de la ejecución de esta.
 app.locals.title = 'NodePop APP';
 
-// MIDDLEWARE para LOGIN de USUARIOS:
-// En lugar de 'app.use' vamos directamente a controlar las PETICIONES al METODO 'index' CONCRETO
-// Por esa razon utilizamos 'app.get', usamos las RUTAS del CONTROLADOR.
-app.use('/login', loginController.index);
+// MIDDLEWARE para el LOGIN de los USUARIOS: 
+app.use('/apiv1/authenticate', require('./routes/apiv1/authController'));
+
+// Para las peticiones que se hagan a la RUTA '/apiv1/anuncios' de la APP se utilizaran las RUTAS del fichero '/apiv1/anuncios.js' para RESPONDER.
+// Al insertar 'jwtAuth()' ANTES del 'require'
+app.use('/apiv1/anuncios', jwtAuth(), require('./routes/apiv1/anuncios'));
 
 // Para las peticiones que se hagan a la RUTA 'raiz' de la APP se utilizaran las RUTAS del fichero 'index.js' para RESPONDER.
 app.use('/', require('./routes/index'));
-
 // Para las peticiones que se hagan a la RUTA '/anuncios' de la APP se utilizaran las RUTAS del fichero 'anuncios.js' para RESPONDER.
 app.use('/anuncios', require('./routes/anuncios'));
 
-
-// Para las peticiones que se hagan a la RUTA '/apiv1/anuncios' de la APP se utilizaran las RUTAS del fichero '/apiv1/anuncios.js' para RESPONDER.
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 
 // Si hemos llegado a este punto y la petición no COINCIDE con ninguno de los Middlewares ANTERIORES se GENERA un ERROR.
 app.use(function (req, res, next) {
@@ -123,47 +126,47 @@ app.use(function (req, res, next) {
 // MANEJADOR DE ERRORES.
 // Se encarga de MANEJAR los distintos TIPOS de ERRORES que pueden ocurrir.
 // Es el Middleware que tiene el PARAMETRO 'err' en la definición de la FUNCION que se debe ejecutar.
-app.use(function(err, req, res, next) {
+app.use(function(error, request, response, next) {
   
   /**
    * ERROR de VALIDACIÓN de los PARAMETROS.
    */
   // Será un error de VALIDACION si 'err' tiene una propiedad 'array'.
-  if (err.array) {
+  if (error.array) {
     // Se establece el STATUS específico.
-    err.status = 422;
-    const errInfo = err.array({ onlyFirstError: true })[0];
+    error.status = 422;
+    const errInfo = error.array({ onlyFirstError: true })[0];
     // Se establece un MENSAJE según la CONDICION...
     /**
      * CONDICIONAL TERNARIO:
      * condición ? expr1 : expr2 
      */
     // Si es una peticion a la API...
-    err.message = isAPI(req) ?
+    error.message = isAPI(request) ?
       // Creamos JSON con el error.
-      { message: __('NOT_VALID'), errors: err.mapped()}
+      { message: __('NOT_VALID'), errors: error.mapped()}
       // si no, creamos un string para mostrarlo en la VISTA HTML.
       : `${__('NOT_VALID')} - ${errInfo.param} ${errInfo.msg}`;
   }
 
   // Se establece el STATUS del ERROR.
   // Si YA TIENE UNO asignado, se MANTIENE, si no, se le ASIGNA el STATUS 500.
-  err.status = err.status || 500;
+  error.status = error.status || 500;
   // Se RESPONDE a la PETICION con el ERROR uqe se ha creado.
-  res.status(err.status);
+  response.status(error.status);
 
   /**
    * ERROR del SERVIDOR.
    */
   // Si el STATUS es un 500 lo 'PINTAMOS' en el LOG
-  if (err.status && err.status >= 500) console.error(err);
+  if (error.status && error.status >= 500) console.error(error);
   
   /**
    * ERROR de SOLICITUD a la API.
    */
-  if (isAPI(req)) {
+  if (isAPI(request)) {
     // RESPONDEMOS con un OBJETO JSON de ERROR...
-    res.json({ success: false, error: err.message });
+    response.json({ success: false, error: error.message, status: error.status });
     // 'CORTAMOS' la ejecución.
     return;
   }
@@ -172,23 +175,23 @@ app.use(function(err, req, res, next) {
    * OTROS ERRORES de HTML
    */
   // Se definen unas VARIABLES LOCALES.
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  response.locals.message = error.message;
+  response.locals.error = request.app.get('env') === 'development' ? error : {};
 
   // RESPONDEMOS RENDERIZANDO la VISTA de ERROR HTML.
-  res.render('error');
+  response.render('error');
 });
 
 /**
  * Funcion AUXILIAR que comprueba si una PETICION este DIRIGIDA a la API.
  */
-function isAPI(req) {
+function isAPI(request) {
   // Retorna TRUE o FALSE en función de que encuentre el string '/api' dentro de la RUTA de la PETICION.
   /**
    * req.originalUrl guarda la URL de la solicitud MENOS el dominio principal:
    * Si la petición es: 'http://www.example.com/admin/new' --> req.originalUrl = '/admin/new'
    */
-  return req.originalUrl.indexOf('/api') === 0;
+  return request.originalUrl.indexOf('/api') === 0;
 }
 
 /**

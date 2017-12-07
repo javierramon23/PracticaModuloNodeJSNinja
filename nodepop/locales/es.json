@@ -15,5 +15,11 @@
 	"WITH_TAG_MOBILE": "Con TAG mobile",
 	"NOT_FOUND": "Rcurso solicitado no encontrado",
 	"PLEASE_LOGIN_TO_ACCESS_APPLICATION": "Porfavor, haz LOGIN para acceder a la APP.",
-	"NOT_VALID": "No Valido."
+	"NOT_VALID": "No Valido.",
+	"EMAIL_ADDRESS": "Email del Usuario:",
+	"YOUR_EMAIL": "aquí tu email...",
+	"WE_NEVER_SHARE_EMAIL": "Nunca compartiremos tu email con nadie.",
+	"PASSWORD": "Contraseña del Usuario",
+	"YOUR_PASSWORD": "aquí tu contraseña...",
+	"SUBMIT": "Enviar"
 }

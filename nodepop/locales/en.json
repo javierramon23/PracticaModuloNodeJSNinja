@@ -15,5 +15,11 @@
 	"WITH_TAG_MOBILE": "With TAG mobile",
 	"NOT_FOUND": "Request resorce not found",
 	"PLEASE_LOGIN_TO_ACCESS_APPLICATION": "Please, login to access APP.",
-	"NOT_VALID": "Not Valid"
+	"NOT_VALID": "Not Valid",
+	"EMAIL_ADDRESS": "User Email:",
+	"YOUR_EMAIL": "your email here..",
+	"WE_NEVER_SHARE_EMAIL": "We'll never share your email with anyone else.",
+	"PASSWORD": "User Password: ",
+	"YOUR_PASSWORD": "your password here..",
+	"SUBMIT": "Submit"
 }

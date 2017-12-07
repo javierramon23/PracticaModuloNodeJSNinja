@@ -17,8 +17,9 @@ require('./lib/i18nSetup');
 // Se realiza la CONEXION con la BD.
 const db = require('./lib/connectMongoose');
 
-// Se carga el MODELO de DATOS ANUNCIO para poder trabajar con el.
+// Se carga el MODELO de DATOS ANUNCIO y USUARIO para poder trabajar con ellos.
 require('./models/Anuncio');
+require('./models/Usuario');
 
 /**
  * Se SUSCRIBE la BD al EVENTO 'open', pero SOLO LA PRIMERA VEZ que se produzca.
@@ -29,7 +30,6 @@ db.once('open', function () {
   // Se CREA una INSTANCIA de la INTERFACE para poder LEER los datos.
   const rl = readLine.createInterface({
     // Se determina cual será la ENTRADA y SALIDA de lo que se va a leer.
-    
     input: process.stdin,   // Se define la ENTRADA ESTANDAR (stdin) TECLADO.
     output: process.stdout  // Se define la SALIDA ESTANDAR (stdout) CONSOLA.
   });
@@ -56,7 +56,8 @@ db.once('open', function () {
  */
 function runInstallScript() {
   async.series([
-      initAnuncios
+      initAnuncios,
+      initUsuarios
     ], (err) => {
       if (err) {
         console.error( __('generic', { err }) );
@@ -74,7 +75,7 @@ function initAnuncios(cb) {
   const Anuncio = mongoose.model('Anuncio');
   // Se ELIMINA el contenido de la BD
   // Se 'CARGA' el fichero que se encarga de CREAR los REGISTROS en la BD.
-  Anuncio.remove({}, ()=> {
+  Anuncio.remove({}, () => {
     console.log('Anuncios borrados.');
     // Cargar anuncios.json
     const fichero = './anuncios.json';
@@ -89,3 +90,22 @@ function initAnuncios(cb) {
     });
   });
 }
+
+/**
+ * 
+ */
+async function initUsuarios() {
+  const Usuario = mongoose.model('Usuario');
+
+  await Usuario.remove();
+
+  const inserted = await Usuario.insertMany([
+    { nombre:'user', email:'user@example.com', password: Usuario.hashPassword('1234') }
+  ]);
+
+  console.log(`Insertados ${inserted.length} usuarios`);
+  return process.exit(1);
+}
+
+
+
