@@ -33,20 +33,21 @@ const Usuario = require('../../models/Usuario');
         }
 
         /**
-         * Si el usuario EXISTE y la PASSWORD coincide, 'construimos' el JWT (Utilizamos la libreria 'jasonwebtoken') 
-         * y lo ENVIAMOS al usuario.
+         * Si el usuario EXISTE y la PASSWORD coincide, 'construimos'
+         * el JWT (Utilizamos la libreria 'jasonwebtoken') y lo ENVIAMOS al usuario.
          */
 
         /**
          * Para CREAR un JWT usamos el método 'sign()' del módulo 'jsonwebtoken' que recibe los parametros:
-         * 1.- Que queremos incluir en el JWT: Objeto JSON con datos.
+         * 1.- Lo que queremos incluir en el JWT: Objeto JSON con datos.
          * 2.- Secreto: Clave PRIVADA.
          * 3.- Tiempo de EXPIRACION.
          * 4.- CallBack.
          */
-        jsonWebToken.sign({ _id: user._id }, process.env.JWT_SECRET, {expiresIn: '2d'}, (error, jwt) => {
+        jsonWebToken.sign({ _id: user._id }, process.env.JWT_SECRET, {expiresIn: 60}, (error, jwt) => {
             // Si se produce un ERROR al crear el TOKEN.
             if(error) {
+                // En este punto podriamos PERSONALIZAR el ERROR (message, status, etc)
                 // Seguimos en el middleware de errores.
                 return next(error);
             }

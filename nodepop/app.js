@@ -43,6 +43,7 @@ const bodyParser = require('body-parser');
 const i18n = require('./lib/i18nSetup');
 
 // Inicializamos las VARIABLES de ENTORNO desde el fichero .env
+// El móulo 'dotenv' permite definir un fichero de variables de entorno (.env) y cargarlas para su uso en la APP.
 require('dotenv').config();
 
 /**
@@ -87,8 +88,11 @@ app.set('view engine', 'ejs');
 
 // Se USA (ejecuta) el LOGGER para 'controlar' las peticiones HTTP.
 app.use(logger('dev'));
+
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 // Se USA (ejecuta) el método STATIC de EXPRESS para determinar de donde se deben servir los ficheros ESTATICOS de la APP.
 app.use(express.static(path.join(__dirname, 'public')));
